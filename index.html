@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Despedida Bella &amp; Akim 🎉</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --pink:   #ff4d8d;
+    --pink2:  #ff85b3;
+    --gold:   #ffc94d;
+    --green:  #2dc98e;
+    --purple: #9b5de5;
+    --dark:   #1a1025;
+    --card-bg: rgba(255,255,255,0.07);
+  }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--dark);
+    color: #fff;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── CONFETTI CANVAS ── */
+  #confetti-canvas {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── LAYOUT ── */
+  .page {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3rem 1.5rem 5rem;
+    gap: 3rem;
+  }
+
+  /* ── HEADER ── */
+  header {
+    text-align: center;
+  }
+
+  .couple-tag {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--pink), var(--purple));
+    border-radius: 999px;
+    padding: 0.35rem 1.2rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  header h1 {
+    font-size: clamp(2.4rem, 8vw, 4.5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+
+  header h1 .bella { color: var(--pink); }
+  header h1 .amp   { color: var(--gold); margin: 0 0.15em; }
+  header h1 .akim  { color: var(--green); }
+
+  header p.subtitle {
+    margin-top: 1rem;
+    color: rgba(255,255,255,0.55);
+    font-size: 1rem;
+    font-weight: 400;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    max-width: 480px;
+    color: rgba(255,255,255,0.2);
+    font-size: 1.1rem;
+  }
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255,255,255,0.12);
+  }
+
+  /* ── GRID DE JOGOS ── */
+  .games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 960px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 1.5rem;
+    padding: 2rem 1.75rem 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    backdrop-filter: blur(12px);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 48px rgba(0,0,0,0.4);
+  }
+
+  .card-icon {
+    font-size: 2.8rem;
+    line-height: 1;
+  }
+
+  .card-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.5;
+  }
+
+  .card h2 {
+    font-size: 1.55rem;
+    font-weight: 800;
+    line-height: 1.1;
+  }
+
+  .card p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.6);
+    flex: 1;
+  }
+
+  .card-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    padding: 0.7rem 1.4rem;
+    border-radius: 999px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    transition: filter 0.2s ease, transform 0.15s ease;
+    width: fit-content;
+  }
+
+  .card-btn:hover {
+    filter: brightness(1.12);
+    transform: scale(1.03);
+  }
+
+  /* accent colors per card */
+  .card--codenames  { border-color: rgba(155, 93, 229, 0.35); }
+  .card--codenames  .card-btn { background: var(--purple); color: #fff; }
+  .card--codenames  h2        { color: var(--pink2); }
+
+  .card--megasenha  { border-color: rgba(255, 201, 77, 0.35); }
+  .card--megasenha  .card-btn { background: var(--gold); color: var(--dark); }
+  .card--megasenha  h2        { color: var(--gold); }
+
+  .card--carnaval   { border-color: rgba(45, 201, 142, 0.35); }
+  .card--carnaval   .card-btn { background: var(--green); color: var(--dark); }
+  .card--carnaval   h2        { color: var(--green); }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    color: rgba(255,255,255,0.25);
+    font-size: 0.8rem;
+  }
+</style>
+</head>
+<body>
+
+<canvas id="confetti-canvas"></canvas>
+
+<div class="page">
+
+  <header>
+    <div class="couple-tag">✨ Despedida de Solteiro/a</div>
+    <h1>
+      <span class="bella">Bella</span>
+      <span class="amp">&amp;</span>
+      <span class="akim">Akim</span>
+    </h1>
+    <p class="subtitle">Escolha um jogo e bora se divertir 🎊</p>
+  </header>
+
+  <div class="divider">🎮</div>
+
+  <section class="games-grid">
+
+    <a class="card card--codenames" href="codenames_bellaakim.html">
+      <div class="card-icon">🕵️</div>
+      <div class="card-label">Jogo 1</div>
+      <h2>Code Nomes</h2>
+      <p>Dê dicas de uma palavra para que seu time adivinhe o maior número de palavras secretas — sem acertar as do time adversário.</p>
+      <span class="card-btn">Jogar →</span>
+    </a>
+
+    <a class="card card--megasenha" href="megasenha_bellaakim.html">
+      <div class="card-icon">🔐</div>
+      <div class="card-label">Jogo 2</div>
+      <h2>Mega Senha</h2>
+      <p>Descubra a senha secreta em poucas tentativas. Cada chute revela quais letras estão certas e se estão na posição certa.</p>
+      <span class="card-btn">Jogar →</span>
+    </a>
+
+    <a class="card card--carnaval" href="trechos_carnaval_bellaakim.html">
+      <div class="card-icon">🥁</div>
+      <div class="card-label">Jogo 3</div>
+      <h2>Trechos de Carnaval</h2>
+      <p>Ouça o trecho de uma música de carnaval e adivinhe o nome da música ou do bloco. Quem reconhece mais?</p>
+      <span class="card-btn">Jogar →</span>
+    </a>
+
+  </section>
+
+  <footer>feito com amor para a despedida 💕</footer>
+
+</div>
+
+<script>
+/* ── Mini confetti ── */
+(function () {
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx    = canvas.getContext('2d');
+  const colors = ['#ff4d8d','#ffc94d','#2dc98e','#9b5de5','#ff85b3','#ffffff'];
+  let W, H, particles = [];
+
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  function rand(a, b) { return a + Math.random() * (b - a); }
+
+  function spawn(n) {
+    for (let i = 0; i < n; i++) {
+      particles.push({
+        x:    rand(0, W),
+        y:    rand(-20, -H * 0.5),
+        r:    rand(4, 9),
+        vx:   rand(-1.2, 1.2),
+        vy:   rand(1.5, 3.5),
+        rot:  rand(0, Math.PI * 2),
+        vrot: rand(-0.06, 0.06),
+        color: colors[Math.floor(rand(0, colors.length))],
+        shape: Math.random() > 0.5 ? 'rect' : 'circle',
+        w:    rand(6, 12),
+        h:    rand(4, 8),
+        alpha: 1,
+      });
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    for (const p of particles) {
+      ctx.save();
+      ctx.globalAlpha = p.alpha;
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.color;
+      if (p.shape === 'rect') {
+        ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+      } else {
+        ctx.beginPath();
+        ctx.arc(0, 0, p.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+    }
+  }
+
+  function update() {
+    particles = particles.filter(p => p.alpha > 0.01 && p.y < H + 20);
+    for (const p of particles) {
+      p.x   += p.vx;
+      p.y   += p.vy;
+      p.rot += p.vrot;
+      if (p.y > H * 0.7) p.alpha -= 0.012;
+    }
+    if (particles.length < 60) spawn(8);
+  }
+
+  function loop() {
+    update();
+    draw();
+    requestAnimationFrame(loop);
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+  spawn(80);
+  loop();
+})();
+</script>
+</body>
+</html>
