@@ -158,24 +158,29 @@ function scrambleWord(w, rnd){
   return shuffled.join('');
 }
 
-// Etapa 0/1: letras embaralhadas ENTRE todas as palavras (o comprimento de cada
-// palavra é mantido, mas as letras vêm de um bolo comum de toda a frase).
-// A frase (posição e tamanho de cada palavra) nunca muda entre etapas — só o
-// jeito de embaralhar as letras muda, por isso usamos sempre a mesma semente
-// por música, calculada uma única vez.
+// Etapa 0/1: letras embaralhadas ENTRE todas as palavras — só letras (a-z com
+// acentos) vão para o bolo comum; pontuação e hífens ficam na posição original
+// de cada token. Número de letras por palavra é mantido.
 function entreScramble(song, idx){
   const lines = song.trecho.split('\n');
   const tokensPerLine = lines.map(l => l.split(/\s+/).filter(Boolean));
   const allTokens = [].concat(...tokensPerLine);
-  const pool = allTokens.join('').split('');
+  // separa chars de cada token; registra só posições de letras no pool
+  const tokenChars = allTokens.map(tok => [...tok]);
+  const letterSlots = []; // {ti, ci}
+  const pool = [];
+  tokenChars.forEach((chars, ti) => {
+    chars.forEach((c, ci) => {
+      if (/\p{L}/u.test(c)) { letterSlots.push({ti, ci}); pool.push(c); }
+    });
+  });
   const r = rng(seedFromStr('entre'+idx));
   const shuffledPool = shuffleWith(pool, r);
-  let p = 0;
-  const scrambledTokens = allTokens.map(tok => {
-    const chunk = shuffledPool.slice(p, p+tok.length);
-    p += tok.length;
-    return chunk.join('');
+  shuffledPool.forEach((letter, i) => {
+    const {ti, ci} = letterSlots[i];
+    tokenChars[ti][ci] = letter;
   });
+  const scrambledTokens = tokenChars.map(chars => chars.join(''));
   let i = 0;
   return tokensPerLine.map(line => line.map(()=> scrambledTokens[i++]).join(' ')).join('\n');
 }
